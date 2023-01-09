@@ -1,0 +1,37 @@
+server.port: 8080
+
+management:
+  server.port: 8081
+  endpoint.health:
+    show-details: always
+    probes.enabled: true
+  endpoints.web.exposure.include:
+    - info
+    - beans
+    - health
+    - conditions
+    - configprops
+    - threaddump
+    - scheduledtasks
+    - mappings
+    - metrics
+    - prometheus
+
+regretan:
+  role: ${REGRETAN_ROLE:worker}
+  hostname: ${HOSTNAME:localhost}
+  kubernetes-port: ${KUBERNETES_PORT}
+  worker:
+    address: ${REGRETAN_SERVER_ADDR:http://regretan-worker.regretan.svc.cluster.local:8080}
+    concurrency: ${WORKER_CONCURRENCY:30}
+
+hikaricp-datasource:
+  jdbc-url: ${REGRETAN_MYSQL_JDBC_URL:jdbc:mysql://localhost:3306/regretan?allowPublicKeyRetrieval=true&useSSL=false&useAffectedRows=true}
+  username: ${REGRETAN_MYSQL_USER:regretan}
+  password: ${REGRETAN_MYSQL_PASSWORD:password}
+  maximum-pool-size: 10
+  minimum-idle-size: 1
+  idle-timeout: 100
+  max-lifetime: 3000
+  read-only: false
+  connection-timeout: 5s
