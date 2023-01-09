@@ -1,0 +1,33 @@
+apiVersion: regretan.io/v1
+kind: TestScenario
+metadata:
+  name: test-scenario-1
+spec:
+  schedule: "0 * * * * ?"
+  steps:
+    - action:
+        kind: empty
+        name: empty-scenario-1
+      matchers:
+        - equal:
+            value: "{NULL}"
+            expected: "{NULL}"
+    - action:
+        kind: empty
+        name: empty-scenario-2
+        delay: 60s
+      matchers:
+        - notEqual:
+            value: "{NULL}"
+            expected: "NOT_NULL"
+    - action:
+        kind: empty
+        name: empty-scenario-3
+        delay: 120s
+      matchers:
+        - equal:
+            value: ""
+            expected: "{NULL}"
+        - notEqual:
+            value: "{NULL}"
+            expected: "NOT_NULL"
