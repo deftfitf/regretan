@@ -49,7 +49,7 @@ jobs:
         uses: helm/kind-action@v1.4.0
 
       - name: Deploy Custom Resource Definition
-        run: kubectl apply -f ./k8s/testscenarioes.regretan.io-v1.yml
+        run: kubectl apply -f ./k8s/testscenarioes.regretan.io-v1.yaml
 
       - name: Test
         run: ./gradlew clean check
