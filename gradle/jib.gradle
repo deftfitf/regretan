@@ -1,0 +1,10 @@
+jib {
+    to {
+        image = project.name
+        tags = [project.version, 'latest']
+    }
+    container {
+        creationTime = "USE_CURRENT_TIMESTAMP"
+        environment = ["TZ": "Asia/Tokyo"]
+    }
+}
