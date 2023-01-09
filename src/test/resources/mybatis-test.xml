@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <settings>
+    <setting name="mapUnderscoreToCamelCase" value="true"/>
+  </settings>
+
+  <typeHandlers>
+  </typeHandlers>
+
+  <environments default="test">
+    <environment id="test">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="org.testcontainers.jdbc.ContainerDatabaseDriver"/>
+        <property name="url"
+          value="jdbc:tc:mysql:8.0.28:///regretan?TC_DAEMON=true&amp;TC_INITSCRIPT=file:ddl/init.sql&amp;useAffectedRows=true&amp;useUnicode=true&amp;characterEncoding=utf8"/>
+        <property name="driver.encoding" value="UTF8"/>
+      </dataSource>
+    </environment>
+  </environments>
+</configuration>
