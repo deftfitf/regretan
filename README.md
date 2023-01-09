@@ -1,4 +1,5 @@
 [![CI Pipeline](https://github.com/deftfitf/regretan/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/deftfitf/regretan/actions/workflows/ci.yaml)
+[![DockerHub](https://img.shields.io/docker/v/deftfitf/regretan)](https://hub.docker.com/r/deftfitf/regretan)
 
 # Regretan
 
