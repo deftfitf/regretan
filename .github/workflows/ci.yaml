@@ -1,0 +1,70 @@
+name: CI Pipeline
+
+on:
+  push:
+  pull_request_target:
+    types: [ opened, synchronize, reopened, ready_for_review ]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: regretan
+          MYSQL_USER: regretan
+          MYSQL_PASSWORD: password
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Init MySQL
+        run: |
+          mysql --protocol=tcp -h localhost -P 3306 -u root -proot_password regretan < ddl/init.sql
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Set up k8s Kind Cluster
+        uses: helm/kind-action@v1.4.0
+
+      - name: Deploy Custom Resource Definition
+        run: kubectl apply -f ./k8s/testscenarioes.regretan.io-v1.yml
+
+      - name: Test
+        run: ./gradlew clean check
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          detailed_summary: true
+
+      - name: Upload build reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: build-reports
+          path: build/reports/
